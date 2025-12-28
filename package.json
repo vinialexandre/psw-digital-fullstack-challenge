@@ -1,0 +1,15 @@
+{
+  "name": "psw-digital-fullstack-challenge",
+  "version": "1.0.0",
+  "description": "Fullstack challenge with .NET 9 backend and Next.js 15 frontend",
+  "scripts": {
+    "dev:backend": "cd backend/src/HolidaysAPI.API && dotnet run",
+    "dev:frontend": "cd frontend && npm run dev",
+    "test:backend": "cd backend && dotnet test",
+    "test:frontend": "cd frontend && npm test"
+  },
+  "keywords": ["dotnet", "nextjs", "fullstack"],
+  "author": "",
+  "license": "MIT"
+}
+
