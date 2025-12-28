@@ -38,6 +38,25 @@
       "problemMatcher": "$msCompile"
     },
     {
+      "label": "clean-frontend-cache",
+      "type": "shell",
+      "command": "Remove-Item -Path 'frontend\\.next' -Recurse -Force -ErrorAction SilentlyContinue",
+      "windows": {
+        "command": "Remove-Item -Path 'frontend\\.next' -Recurse -Force -ErrorAction SilentlyContinue"
+      },
+      "linux": {
+        "command": "rm -rf frontend/.next"
+      },
+      "osx": {
+        "command": "rm -rf frontend/.next"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      }
+    },
+    {
       "label": "run-frontend",
       "type": "shell",
       "command": "start cmd /k \"cd frontend && npm run dev\"",
@@ -54,7 +73,8 @@
       "presentation": {
         "reveal": "never",
         "panel": "shared"
-      }
+      },
+      "dependsOn": ["clean-frontend-cache"]
     },
     {
       "label": "open-frontend",
