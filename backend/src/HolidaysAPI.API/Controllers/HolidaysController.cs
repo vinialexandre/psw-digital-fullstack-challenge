@@ -7,7 +7,7 @@ namespace HolidaysAPI.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/holidays")]
 public class HolidaysController : ControllerBase
 {
     private readonly IHolidayService _holidayService;
@@ -19,6 +19,7 @@ public class HolidaysController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<ApiResponse<IEnumerable<HolidayDto>>>> GetHolidays(
+        [FromQuery] int? year,
         [FromQuery] DateTime? date,
         [FromQuery] string? type,
         [FromQuery] string? searchTerm,
@@ -27,6 +28,7 @@ public class HolidaysController : ControllerBase
     {
         var filter = new HolidayFilter
         {
+            Year = year,
             Date = date,
             Type = type,
             SearchTerm = searchTerm,

@@ -8,8 +8,8 @@ import { z } from 'zod';
 import { authService } from '@/lib/api';
 
 const loginSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
-  password: z.string().min(1, 'Password is required'),
+  username: z.string().min(1, 'Usuário é obrigatório'),
+  password: z.string().min(1, 'Senha é obrigatória'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -33,15 +33,14 @@ export default function LoginPage() {
 
     try {
       const response = await authService.login(data);
-      
+
       if (response.success) {
-        localStorage.setItem('token', response.data.token);
         router.push('/');
       } else {
         setError(response.message);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setError(err instanceof Error ? err.message : 'Falha no login');
     } finally {
       setLoading(false);
     }
@@ -50,17 +49,18 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Holidays API</h1>
-        
+        <h1 className="text-2xl font-bold text-center mb-6 text-black">Feriados Brasileiros</h1>
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Username
+              Usuário
             </label>
             <input
               {...register('username')}
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="username"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="admin"
             />
             {errors.username && (
@@ -70,12 +70,13 @@ export default function LoginPage() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Password
+              Senha
             </label>
             <input
               {...register('password')}
               type="password"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              autoComplete="current-password"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
               placeholder="admin123"
             />
             {errors.password && (
@@ -94,13 +95,13 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
         </form>
 
         <div className="mt-4 p-3 bg-gray-50 rounded-md">
           <p className="text-xs text-gray-600 text-center">
-            Default credentials: admin / admin123
+            Credenciais padrão: admin / admin123
           </p>
         </div>
       </div>

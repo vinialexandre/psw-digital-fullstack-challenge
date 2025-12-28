@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Holidays API - Brazilian Holidays 2025",
-  description: "View and filter Brazilian holidays for 2025",
+  title: "API de Feriados - Feriados Brasileiros",
+  description: "Visualize e filtre os feriados brasileiros por ano",
 };
 
 export default function RootLayout({
@@ -12,7 +12,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className="antialiased">
         {children}
       </body>

@@ -21,8 +21,19 @@ export function useHolidays(initialFilter?: HolidayFilter) {
       } else {
         setError(response.message);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch holidays');
+    } catch (err: unknown) {
+      if (err && typeof err === 'object' && 'response' in err) {
+        const axiosError = err as { response?: { status?: number } };
+        if (axiosError.response?.status === 401) {
+          return;
+        } else if (!axiosError.response) {
+          return;
+        } else {
+          setError('Erro ao carregar feriados');
+        }
+      } else {
+        return;
+      }
     } finally {
       setLoading(false);
     }

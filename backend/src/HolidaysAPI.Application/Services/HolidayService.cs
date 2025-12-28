@@ -21,9 +21,12 @@ public class HolidayService : IHolidayService
     {
         try
         {
+            var year = filter.Year ?? DateTime.Now.Year;
+            var cacheKey = $"holidays_{year}";
+
             var holidays = await _cacheService.GetOrCreateAsync(
-                "holidays_2025",
-                async () => await _repository.GetAllAsync(),
+                cacheKey,
+                async () => await _repository.GetByYearAsync(year),
                 TimeSpan.FromHours(24)
             );
 

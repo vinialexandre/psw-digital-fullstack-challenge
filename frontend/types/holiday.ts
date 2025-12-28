@@ -2,9 +2,11 @@ export interface Holiday {
   date: string;
   name: string;
   type: string;
+  [key: string]: unknown;
 }
 
 export interface HolidayFilter {
+  year?: number;
   date?: string;
   type?: string;
   searchTerm?: string;

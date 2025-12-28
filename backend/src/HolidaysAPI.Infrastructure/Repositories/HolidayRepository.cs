@@ -15,7 +15,12 @@ public class HolidayRepository : IHolidayRepository
 
     public async Task<IEnumerable<Holiday>> GetAllAsync()
     {
-        return await _brasilApiService.GetHolidaysAsync(2025);
+        return await GetByYearAsync(DateTime.Now.Year);
+    }
+
+    public async Task<IEnumerable<Holiday>> GetByYearAsync(int year)
+    {
+        return await _brasilApiService.GetHolidaysAsync(year);
     }
 }
 
