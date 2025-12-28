@@ -12,7 +12,6 @@ nupkg/
 [Ll]ogs/
 
 .vs/
-.vscode/
 *.user
 *.userosscache
 *.suo
