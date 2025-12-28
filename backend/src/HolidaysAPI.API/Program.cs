@@ -1,14 +1,18 @@
 using System.Text;
+using HealthChecks.UI.Client;
 using HolidaysAPI.API.Middlewares;
 using HolidaysAPI.Application.Interfaces;
 using HolidaysAPI.Application.Services;
 using HolidaysAPI.Domain.Interfaces;
 using HolidaysAPI.Infrastructure.Cache;
+using HolidaysAPI.Infrastructure.Configuration;
 using HolidaysAPI.Infrastructure.ExternalServices;
 using HolidaysAPI.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,14 +91,41 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddMemoryCache();
+var redisSettings = builder.Configuration.GetSection(RedisSettings.SectionName).Get<RedisSettings>()
+    ?? new RedisSettings();
+
+builder.Services.Configure<RedisSettings>(builder.Configuration.GetSection(RedisSettings.SectionName));
+
+if (redisSettings.Enabled)
+{
+    var redisConfiguration = ConfigurationOptions.Parse(redisSettings.ConnectionString);
+    redisConfiguration.AbortOnConnectFail = redisSettings.AbortOnConnectFail;
+    redisConfiguration.ConnectTimeout = redisSettings.ConnectTimeout;
+    redisConfiguration.SyncTimeout = redisSettings.SyncTimeout;
+    redisConfiguration.ConnectRetry = redisSettings.ConnectRetry;
+
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    {
+        return ConnectionMultiplexer.Connect(redisConfiguration);
+    });
+
+    builder.Services.AddSingleton<ICacheService, RedisCacheService>();
+}
+else
+{
+    builder.Services.AddMemoryCache();
+    builder.Services.AddSingleton<ICacheService, CacheService>();
+}
+
+builder.Services.AddHealthChecks()
+    .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), tags: ["ready"])
+    .AddRedis(redisSettings.ConnectionString, name: "redis", tags: ["cache", "redis", "ready"]);
 
 builder.Services.AddHttpClient<BrasilApiService>();
 
 builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddSingleton<ICacheService, CacheService>();
 
 builder.Services.AddCors(options =>
 {
@@ -131,5 +162,21 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready"),
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false
+});
 
 app.Run();

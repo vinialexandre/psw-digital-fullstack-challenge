@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: holidays-api-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    networks:
+      - holidays-network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: holidays-api
+    ports:
+      - "5129:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Redis__ConnectionString=redis:6379
+      - Redis__Enabled=true
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - holidays-network
+
+volumes:
+  redis-data:
+
+networks:
+  holidays-network:
+    driver: bridge
+
