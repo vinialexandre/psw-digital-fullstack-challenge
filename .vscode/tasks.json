@@ -40,9 +40,10 @@
     {
       "label": "clean-frontend-cache",
       "type": "shell",
-      "command": "Remove-Item -Path 'frontend\\.next' -Recurse -Force -ErrorAction SilentlyContinue",
+      "command": "if exist frontend\\.next rmdir /s /q frontend\\.next",
       "windows": {
-        "command": "Remove-Item -Path 'frontend\\.next' -Recurse -Force -ErrorAction SilentlyContinue"
+        "command": "cmd",
+        "args": ["/c", "if exist frontend\\.next rmdir /s /q frontend\\.next"]
       },
       "linux": {
         "command": "rm -rf frontend/.next"
@@ -73,8 +74,7 @@
       "presentation": {
         "reveal": "never",
         "panel": "shared"
-      },
-      "dependsOn": ["clean-frontend-cache"]
+      }
     },
     {
       "label": "open-frontend",
