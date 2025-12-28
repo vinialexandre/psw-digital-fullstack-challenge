@@ -34,7 +34,7 @@
       "configurations": [
         ".NET Core Launch (Backend API)"
       ],
-      "preLaunchTask": "start-fullstack",
+      "preLaunchTask": "build-and-start-frontend",
       "stopAll": true,
       "presentation": {
         "hidden": false,
