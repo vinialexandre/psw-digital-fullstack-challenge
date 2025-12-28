@@ -68,9 +68,15 @@ next-env.d.ts
 
 coverage/
 .nyc_output/
+TestResults/
+*.opencover.xml
+*.trx
 
 .idea/
 *.swp
 *.swo
 *~
+
+.sonar/
+.scannerwork/
 
