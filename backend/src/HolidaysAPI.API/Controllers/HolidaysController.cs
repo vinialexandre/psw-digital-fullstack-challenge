@@ -18,6 +18,9 @@ public class HolidaysController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<HolidayDto>>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<IEnumerable<HolidayDto>>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<ApiResponse<IEnumerable<HolidayDto>>>> GetHolidays(
         [FromQuery] int? year,
         [FromQuery] DateTime? date,

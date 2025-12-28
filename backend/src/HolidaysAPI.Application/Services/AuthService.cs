@@ -33,7 +33,8 @@ public class AuthService : IAuthService
                 new LoginResponse
                 {
                     Token = token,
-                    ExpiresAt = expiresAt
+                    ExpiresAt = expiresAt,
+                    Username = request.Username
                 },
                 message: "Login successful"
             );

@@ -18,6 +18,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<LoginResponse>), StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<ApiResponse<LoginResponse>>> Login([FromBody] LoginRequest request)
     {
         var result = await _authService.LoginAsync(request);
@@ -41,10 +43,11 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("logout")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public ActionResult Logout()
     {
         Response.Cookies.Delete("jwt");
-        return Ok(new { success = true, message = "Logout successful" });
+        return Ok(new { success = true, message = "Logout realizado com sucesso" });
     }
 }
 
