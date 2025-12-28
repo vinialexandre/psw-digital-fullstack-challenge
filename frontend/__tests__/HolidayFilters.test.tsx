@@ -5,68 +5,72 @@ describe('HolidayFilters', () => {
   it('renders all filter inputs', () => {
     const mockOnFilterChange = jest.fn();
     render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
-    
-    expect(screen.getByPlaceholderText('Holiday name...')).toBeInTheDocument();
-    expect(screen.getByLabelText('Filter by Type')).toBeInTheDocument();
-    expect(screen.getByLabelText('Filter by Date')).toBeInTheDocument();
+
+    expect(screen.getByPlaceholderText('Nome do feriado...')).toBeInTheDocument();
+    expect(screen.getByText('Tipo')).toBeInTheDocument();
+    expect(screen.getByText('Ano')).toBeInTheDocument();
+    expect(screen.getByText('Filtrar')).toBeInTheDocument();
+    expect(screen.getByText('Limpar')).toBeInTheDocument();
   });
 
   it('calls onFilterChange when search button is clicked', () => {
     const mockOnFilterChange = jest.fn();
     render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
-    
-    const searchInput = screen.getByPlaceholderText('Holiday name...');
-    fireEvent.change(searchInput, { target: { value: 'Christmas' } });
-    
-    const searchButton = screen.getByText('🔍');
+
+    const searchInput = screen.getByPlaceholderText('Nome do feriado...');
+    fireEvent.change(searchInput, { target: { value: 'Natal' } });
+
+    const searchButton = screen.getByText('Filtrar');
     fireEvent.click(searchButton);
-    
-    expect(mockOnFilterChange).toHaveBeenCalledWith({
-      searchTerm: 'Christmas',
-      type: undefined,
-      date: undefined,
-    });
+
+    expect(mockOnFilterChange).toHaveBeenCalled();
+    const callArgs = mockOnFilterChange.mock.calls[0][0];
+    expect(callArgs.searchTerm).toBe('Natal');
+    expect(callArgs.year).toBeDefined();
   });
 
   it('calls onFilterChange when type is selected', () => {
     const mockOnFilterChange = jest.fn();
-    render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
-    
-    const typeSelect = screen.getByLabelText('Filter by Type');
+    const { container } = render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
+
+    const typeSelect = container.querySelectorAll('select')[1];
     fireEvent.change(typeSelect, { target: { value: 'National' } });
-    
-    expect(mockOnFilterChange).toHaveBeenCalledWith({
-      searchTerm: undefined,
-      type: 'National',
-      date: undefined,
-    });
+
+    const searchButton = screen.getByText('Filtrar');
+    fireEvent.click(searchButton);
+
+    expect(mockOnFilterChange).toHaveBeenCalled();
+    const callArgs = mockOnFilterChange.mock.calls[0][0];
+    expect(callArgs.type).toBe('National');
   });
 
-  it('calls onFilterChange when date is selected', () => {
+  it('calls onFilterChange when year is selected', () => {
     const mockOnFilterChange = jest.fn();
-    render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
-    
-    const dateInput = screen.getByLabelText('Filter by Date');
-    fireEvent.change(dateInput, { target: { value: '2025-12-25' } });
-    
-    expect(mockOnFilterChange).toHaveBeenCalledWith({
-      searchTerm: undefined,
-      type: undefined,
-      date: '2025-12-25',
-    });
+    const { container } = render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
+
+    const yearSelect = container.querySelectorAll('select')[0];
+    fireEvent.change(yearSelect, { target: { value: '2023' } });
+
+    const searchButton = screen.getByText('Filtrar');
+    fireEvent.click(searchButton);
+
+    expect(mockOnFilterChange).toHaveBeenCalled();
+    const callArgs = mockOnFilterChange.mock.calls[0][0];
+    expect(callArgs.year).toBe(2023);
   });
 
   it('clears all filters when clear button is clicked', () => {
     const mockOnFilterChange = jest.fn();
+    const currentYear = new Date().getFullYear();
     render(<HolidayFilters onFilterChange={mockOnFilterChange} />);
-    
-    const searchInput = screen.getByPlaceholderText('Holiday name...');
-    fireEvent.change(searchInput, { target: { value: 'Christmas' } });
-    
-    const clearButton = screen.getByText('Clear Filters');
+
+    const searchInput = screen.getByPlaceholderText('Nome do feriado...');
+    fireEvent.change(searchInput, { target: { value: 'Natal' } });
+
+    const clearButton = screen.getByText('Limpar');
     fireEvent.click(clearButton);
-    
-    expect(mockOnFilterChange).toHaveBeenCalledWith({});
+
+    expect(mockOnFilterChange).toHaveBeenCalledWith({ year: currentYear });
     expect(searchInput).toHaveValue('');
   });
 });

@@ -51,7 +51,7 @@ describe('DataTable', () => {
   });
 
   it('displays sort indicator for current sort field', () => {
-    render(
+    const { container } = render(
       <DataTable
         data={mockData}
         columns={columns}
@@ -59,8 +59,10 @@ describe('DataTable', () => {
         currentSortDescending={false}
       />
     );
-    
-    expect(screen.getByText('↑')).toBeInTheDocument();
+
+    const nameHeader = screen.getByText('Name').closest('th');
+    const svg = nameHeader?.querySelector('svg');
+    expect(svg).toBeInTheDocument();
   });
 
   it('renders custom cell content when render function is provided', () => {
