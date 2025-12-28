@@ -11,7 +11,7 @@ jobs:
   backend-analysis:
     name: Backend Analysis
     runs-on: windows-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,18 +53,18 @@ jobs:
         working-directory: ./backend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BACKEND }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\..\..\.sonar\scanner\dotnet-sonarscanner begin /k:"vinialexandre_psw-digital-fullstack-challenge-backend" /o:"vinialexandre" /d:sonar.token="${{ secrets.SONAR_TOKEN_BACKEND }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          .\..\..\.sonar\scanner\dotnet-sonarscanner begin /k:"vinialexandre_psw-digital-fullstack-challenge" /o:"vinialexandre" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.sources="src" /d:sonar.tests="tests"
           dotnet build --no-restore
           dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/
-          .\..\..\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN_BACKEND }}"
+          .\..\..\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
   frontend-analysis:
     name: Frontend Analysis
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -92,5 +92,5 @@ jobs:
           projectBaseDir: frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FRONTEND }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
