@@ -60,20 +60,29 @@
     {
       "label": "run-frontend",
       "type": "shell",
-      "command": "start cmd /k \"cd frontend && npm run dev\"",
-      "windows": {
-        "command": "start cmd /k \"cd frontend && npm run dev\""
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend",
+        "shell": {
+          "executable": "cmd.exe",
+          "args": ["/c"]
+        }
       },
-      "linux": {
-        "command": "gnome-terminal -- bash -c 'cd frontend && npm run dev; exec bash'"
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Local:.*http://localhost:3000"
+        }
       },
-      "osx": {
-        "command": "osascript -e 'tell app \"Terminal\" to do script \"cd ${workspaceFolder}/frontend && npm run dev\"'"
-      },
-      "problemMatcher": [],
       "presentation": {
-        "reveal": "never",
-        "panel": "shared"
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "frontend"
       }
     },
     {
