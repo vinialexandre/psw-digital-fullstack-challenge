@@ -19,7 +19,13 @@ public class BrasilApiService
         response.EnsureSuccessStatusCode();
 
         var content = await response.Content.ReadAsStringAsync();
-        var brasilApiHolidays = JsonSerializer.Deserialize<List<BrasilApiHoliday>>(content);
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        var brasilApiHolidays = JsonSerializer.Deserialize<List<BrasilApiHoliday>>(content, options);
 
         if (brasilApiHolidays == null)
         {
@@ -28,17 +34,19 @@ public class BrasilApiService
 
         return brasilApiHolidays.Select(h => new Holiday
         {
-            Date = DateTime.Parse(h.date),
-            Name = h.name,
-            Type = h.type == "national" ? HolidayType.National : HolidayType.Municipal
+            Date = DateTime.Parse(h.Date),
+            Name = h.Name,
+            Type = h.Type.Equals("national", StringComparison.OrdinalIgnoreCase)
+                ? HolidayType.National
+                : HolidayType.Municipal
         });
     }
 
     private class BrasilApiHoliday
     {
-        public string date { get; set; } = string.Empty;
-        public string name { get; set; } = string.Empty;
-        public string type { get; set; } = string.Empty;
+        public string Date { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
     }
 }
 
