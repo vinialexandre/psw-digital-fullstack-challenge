@@ -3,8 +3,16 @@ Write-Host "Executando testes do backend com cobertura de código..." -Foregroun
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptPath
 
+Write-Host "`nParando processos .NET que possam estar bloqueando arquivos..." -ForegroundColor Yellow
+Get-Process -Name "dotnet" -ErrorAction SilentlyContinue | Where-Object { $_.Path -like "*\dotnet.exe" } | Stop-Process -Force -ErrorAction SilentlyContinue
+
+Start-Sleep -Seconds 2
+
+Write-Host "`nLimpando arquivos de build..." -ForegroundColor Yellow
+dotnet clean --nologo
+
 Write-Host "`nRestaurando dependências..." -ForegroundColor Yellow
-dotnet restore
+dotnet restore --nologo
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "`nErro ao restaurar dependências!" -ForegroundColor Red
