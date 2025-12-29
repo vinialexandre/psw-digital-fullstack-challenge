@@ -36,7 +36,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           dotnet sonarscanner begin \
-            /k:"vinialexandre_vinialexandre-psw-digital-fullstack-challenge-backend" \
+            /k:"vinialexandre_psw-digital-fullstack-challenge-backend" \
             /o:"vinialexandre" \
             /n:"PSW Digital Fullstack Challenge - Backend" \
             /d:sonar.token="${SONAR_TOKEN}" \
