@@ -3,7 +3,7 @@ version: '3.8'
 services:
   redis:
     image: redis:7-alpine
-    container_name: holidays-api-redis
+    container_name: holidays-redis
     ports:
       - "6379:6379"
     volumes:
@@ -17,11 +17,11 @@ services:
     networks:
       - holidays-network
 
-  api:
+  backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: holidays-api
+    container_name: holidays-backend
     ports:
       - "5129:8080"
     environment:

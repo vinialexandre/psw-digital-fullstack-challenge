@@ -2,6 +2,62 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "docker-compose-up",
+      "type": "shell",
+      "command": "docker-compose up --build -d",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "docker-compose-down",
+      "type": "shell",
+      "command": "docker-compose down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "run-frontend",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "Ready in"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "frontend"
+      }
+    },
+    {
+      "label": "start-full-stack",
+      "dependsOn": ["docker-compose-up", "run-frontend"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
       "label": "build",
       "command": "dotnet",
       "type": "process",
@@ -12,102 +68,6 @@
         "/consoleloggerparameters:NoSummary;ForceNoAlign"
       ],
       "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "publish",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "publish",
-        "${workspaceFolder}/backend/src/HolidaysAPI.API/HolidaysAPI.API.csproj",
-        "/property:GenerateFullPaths=true",
-        "/consoleloggerparameters:NoSummary;ForceNoAlign"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "watch",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "watch",
-        "run",
-        "--project",
-        "${workspaceFolder}/backend/src/HolidaysAPI.API/HolidaysAPI.API.csproj"
-      ],
-      "problemMatcher": "$msCompile"
-    },
-    {
-      "label": "clean-frontend-cache",
-      "type": "shell",
-      "command": "if exist frontend\\.next rmdir /s /q frontend\\.next",
-      "windows": {
-        "command": "cmd",
-        "args": ["/c", "if exist frontend\\.next rmdir /s /q frontend\\.next"]
-      },
-      "linux": {
-        "command": "rm -rf frontend/.next"
-      },
-      "osx": {
-        "command": "rm -rf frontend/.next"
-      },
-      "problemMatcher": [],
-      "presentation": {
-        "reveal": "never",
-        "panel": "shared"
-      }
-    },
-    {
-      "label": "run-frontend",
-      "type": "shell",
-      "command": "npm run dev",
-      "options": {
-        "cwd": "${workspaceFolder}/frontend",
-        "shell": {
-          "executable": "cmd.exe",
-          "args": ["/c"]
-        }
-      },
-      "isBackground": true,
-      "problemMatcher": {
-        "pattern": {
-          "regexp": "^$"
-        },
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": ".",
-          "endsPattern": "Local:.*http://localhost:3000"
-        }
-      },
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "group": "frontend"
-      }
-    },
-    {
-      "label": "open-frontend",
-      "type": "shell",
-      "command": "start http://localhost:3000",
-      "windows": {
-        "command": "start http://localhost:3000"
-      },
-      "linux": {
-        "command": "xdg-open http://localhost:3000"
-      },
-      "osx": {
-        "command": "open http://localhost:3000"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "build-and-start-frontend",
-      "dependsOrder": "sequence",
-      "dependsOn": [
-        "build",
-        "run-frontend",
-        "open-frontend"
-      ]
     }
   ]
 }

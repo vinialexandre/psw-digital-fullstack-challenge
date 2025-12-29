@@ -27,7 +27,7 @@ describe('LoginPage', () => {
       target: { value: username },
     });
 
-    fireEvent.change(screen.getByPlaceholderText('admin123'), {
+    fireEvent.change(screen.getByPlaceholderText('admin'), {
       target: { value: password },
     });
   }
@@ -45,7 +45,7 @@ describe('LoginPage', () => {
 
     render(<LoginPage />);
 
-    fillForm('admin', 'admin123');
+    fillForm('admin', 'admin');
 
     fireEvent.click(screen.getByText('Entrar'));
 
@@ -79,7 +79,7 @@ describe('LoginPage', () => {
 
     render(<LoginPage />);
 
-    fillForm('admin', 'admin123');
+    fillForm('admin', 'admin');
     fireEvent.click(screen.getByText('Entrar'));
 
     await waitFor(() => {

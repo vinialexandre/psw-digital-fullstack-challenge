@@ -112,19 +112,44 @@ Cliente → API → AuthController → AuthService
 
 ## Executando o Projeto
 
-### Com Docker Compose (Recomendado)
+### Pre-requisitos
+- Docker e Docker Compose
+- Node.js 20+
+- .NET 9 SDK (opcional, para desenvolvimento local sem Docker)
+
+### Com VS Code (Recomendado)
+
+1. Abra o projeto no VS Code
+2. Selecione a configuracao **"Full Stack (Docker + Frontend)"** no menu de debug
+3. Pressione **F5**
+
+Isso ira:
+- Subir o Redis e Backend via Docker Compose
+- Iniciar o Frontend com hot-reload
+- Abrir o navegador em http://localhost:3000
+
+### Com Docker Compose (Terminal)
 
 ```bash
-cd backend
-docker-compose up -d
+docker-compose up --build -d
+cd frontend && npm install && npm run dev
 ```
 
-Serviços disponíveis:
-- API: http://localhost:5129
-- Redis: localhost:6379
-- Swagger: http://localhost:5129/swagger
+### Servicos disponiveis
+| Servico | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:5129 |
+| Swagger | http://localhost:5129/swagger |
+| Redis | localhost:6379 |
 
-### Localmente
+### Parar os servicos
+
+```bash
+docker-compose down
+```
+
+### Desenvolvimento local (sem Docker)
 
 #### Backend
 ```bash
@@ -138,6 +163,8 @@ cd frontend
 npm install
 npm run dev
 ```
+
+> **Nota**: Para rodar o backend localmente sem Docker, desabilite o Redis em `appsettings.Development.json` ou suba um Redis local.
 
 ## Endpoints Principais
 

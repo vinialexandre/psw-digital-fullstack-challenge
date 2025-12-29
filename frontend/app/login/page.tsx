@@ -77,7 +77,7 @@ export default function LoginPage() {
               type="password"
               autoComplete="current-password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-              placeholder="admin123"
+              placeholder="admin"
             />
             {errors.password && (
               <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
@@ -101,7 +101,7 @@ export default function LoginPage() {
 
         <div className="mt-4 p-3 bg-gray-50 rounded-md">
           <p className="text-xs text-gray-600 text-center">
-            Credenciais padrão: admin / admin123
+            Credenciais padrão: admin / admin
           </p>
         </div>
       </div>

@@ -2,6 +2,21 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Full Stack (Docker + Frontend)",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "start-full-stack",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}/frontend",
+      "console": "integratedTerminal",
+      "serverReadyAction": {
+        "pattern": "Ready in",
+        "uriFormat": "http://localhost:3000",
+        "action": "openExternally"
+      }
+    },
+    {
       "name": ".NET Core Launch (Backend API)",
       "type": "coreclr",
       "request": "launch",
@@ -17,29 +32,6 @@
       },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "sourceFileMap": {
-        "/Views": "${workspaceFolder}/Views"
-      }
-    },
-    {
-      "name": ".NET Core Attach",
-      "type": "coreclr",
-      "request": "attach"
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Full Stack (Backend + Frontend)",
-      "configurations": [
-        ".NET Core Launch (Backend API)"
-      ],
-      "preLaunchTask": "build-and-start-frontend",
-      "stopAll": true,
-      "presentation": {
-        "hidden": false,
-        "group": "",
-        "order": 1
       }
     }
   ]
