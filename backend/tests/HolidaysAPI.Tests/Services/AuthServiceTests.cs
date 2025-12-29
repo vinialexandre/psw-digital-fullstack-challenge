@@ -1,7 +1,8 @@
 using FluentAssertions;
 using HolidaysAPI.Application.DTOs;
 using HolidaysAPI.Application.Services;
-using Microsoft.Extensions.Configuration;
+using HolidaysAPI.Domain.Configuration;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace HolidaysAPI.Tests.Services;
@@ -9,18 +10,30 @@ namespace HolidaysAPI.Tests.Services;
 public class AuthServiceTests
 {
     private readonly AuthService _service;
-    private readonly Mock<IConfiguration> _mockConfiguration;
 
     public AuthServiceTests()
     {
-        _mockConfiguration = new Mock<IConfiguration>();
-        _mockConfiguration.Setup(x => x["Jwt:Key"]).Returns("MySecretKeyForJWTTokenGeneration12345678901234567890");
-        _mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("HolidaysAPI");
-        _mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("HolidaysAPIUsers");
-        _mockConfiguration.Setup(x => x["Auth:AdminUsername"]).Returns("admin");
-        _mockConfiguration.Setup(x => x["Auth:AdminPassword"]).Returns("admin123");
+        var jwtSettings = new JwtSettings
+        {
+            Key = "MySecretKeyForJWTTokenGeneration12345678901234567890",
+            Issuer = "HolidaysAPI",
+            Audience = "HolidaysAPIUsers",
+            ExpirationHours = 24
+        };
 
-        _service = new AuthService(_mockConfiguration.Object);
+        var authSettings = new AuthSettings
+        {
+            AdminUsername = "admin",
+            AdminPassword = "admin"
+        };
+
+        var mockJwtOptions = new Mock<IOptions<JwtSettings>>();
+        mockJwtOptions.Setup(x => x.Value).Returns(jwtSettings);
+
+        var mockAuthOptions = new Mock<IOptions<AuthSettings>>();
+        mockAuthOptions.Setup(x => x.Value).Returns(authSettings);
+
+        _service = new AuthService(mockJwtOptions.Object, mockAuthOptions.Object);
     }
 
     [Fact]
@@ -29,7 +42,7 @@ public class AuthServiceTests
         var request = new LoginRequest
         {
             Username = "admin",
-            Password = "admin123"
+            Password = "admin"
         };
 
         var result = await _service.LoginAsync(request);
@@ -61,7 +74,7 @@ public class AuthServiceTests
         var request = new LoginRequest
         {
             Username = "",
-            Password = "admin123"
+            Password = "admin"
         };
 
         var result = await _service.LoginAsync(request);
