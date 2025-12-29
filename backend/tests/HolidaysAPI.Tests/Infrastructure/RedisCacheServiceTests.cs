@@ -184,6 +184,63 @@ public class RedisCacheServiceTests : IDisposable
             Times.Once);
     }
 
+    [Fact]
+    public void Constructor_WithNullRedis_ThrowsArgumentNullException()
+    {
+        Action act = () => new RedisCacheService(null!, _settingsMock.Object, _loggerMock.Object);
+
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Constructor_WithNullSettings_ThrowsArgumentNullException()
+    {
+        Action act = () => new RedisCacheService(_redisMock.Object, null!, _loggerMock.Object);
+
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public void Constructor_WithNullLogger_ThrowsArgumentNullException()
+    {
+        Action act = () => new RedisCacheService(_redisMock.Object, _settingsMock.Object, null!);
+
+        act.Should().Throw<ArgumentNullException>();
+    }
+
+    [Fact]
+    public async Task GetOrCreateAsync_WhenValueIsNull_DoesNotSetCache()
+    {
+        var key = "test-key";
+
+        _databaseMock.Setup(x => x.StringGetAsync(key, It.IsAny<CommandFlags>()))
+            .ReturnsAsync(RedisValue.Null);
+
+        var result = await _cacheService.GetOrCreateAsync<string?>(key, () => Task.FromResult<string?>(null));
+
+        result.Should().BeNull();
+        _databaseMock.Verify(x => x.StringSetAsync(
+            It.IsAny<RedisKey>(),
+            It.IsAny<RedisValue>(),
+            It.IsAny<TimeSpan?>(),
+            It.IsAny<bool>(),
+            It.IsAny<When>(),
+            It.IsAny<CommandFlags>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task GetOrCreateAsync_WhenUnexpectedExceptionThrown_RethrowsException()
+    {
+        var key = "test-key";
+
+        _databaseMock.Setup(x => x.StringGetAsync(key, It.IsAny<CommandFlags>()))
+            .ThrowsAsync(new InvalidOperationException("Unexpected error"));
+
+        Func<Task> act = async () => await _cacheService.GetOrCreateAsync(key, () => Task.FromResult("value"));
+
+        await act.Should().ThrowAsync<InvalidOperationException>();
+    }
+
     public void Dispose()
     {
         _cacheService?.Dispose();
