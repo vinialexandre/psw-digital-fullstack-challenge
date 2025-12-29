@@ -23,11 +23,11 @@ describe('LoginPage', () => {
   });
 
   function fillForm(username: string, password: string) {
-    fireEvent.change(screen.getByPlaceholderText('admin'), {
+    fireEvent.change(screen.getByLabelText(/usuario/i), {
       target: { value: username },
     });
 
-    fireEvent.change(screen.getByPlaceholderText('admin'), {
+    fireEvent.change(screen.getByLabelText(/senha/i), {
       target: { value: password },
     });
   }

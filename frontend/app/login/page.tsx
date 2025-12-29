@@ -53,11 +53,12 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Usuário
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              Usuario
             </label>
             <input
               {...register('username')}
+              id="username"
               type="text"
               autoComplete="username"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
@@ -69,11 +70,12 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
               Senha
             </label>
             <input
               {...register('password')}
+              id="password"
               type="password"
               autoComplete="current-password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
