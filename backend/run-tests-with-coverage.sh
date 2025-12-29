@@ -5,7 +5,7 @@ echo -e "\033[0;36mExecutando testes do backend com cobertura de código...\033[
 echo -e "\n\033[0;33mRestaurando dependências...\033[0m"
 dotnet restore
 
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
     echo -e "\n\033[0;31mErro ao restaurar dependências!\033[0m"
     exit 1
 fi
@@ -18,7 +18,7 @@ dotnet test \
     /p:Exclude="[*]*.Program,[*]*.Migrations.*" \
     --verbosity normal
 
-if [ $? -ne 0 ]; then
+if [[ $? -ne 0 ]]; then
     echo -e "\n\033[0;31mTestes falharam!\033[0m"
     exit 1
 fi
