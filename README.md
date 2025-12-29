@@ -38,7 +38,7 @@ API RESTful para consulta de feriados brasileiros com autenticacao JWT e cache d
 └─────────────────────────────────────────────────────────┘
 ```
 
-## Fluxo de Requisicoes
+## Fluxo de Requisições
 
 ### 1. Consulta de Feriados (GET /api/holidays)
 
@@ -84,7 +84,7 @@ Cliente → API → AuthController → AuthService
 
 ### Quando armazenamos no cache:
 - **Primeira requisicao**: Dados nao existem no Redis → Busca na BrasilAPI → Armazena no Redis
-- **Requisicoes seguintes**: Dados existem no Redis → Retorna direto do cache (muito mais rapido)
+- **Requisições seguintes**: Dados existem no Redis → Retorna direto do cache (muito mais rapido)
 
 ### Expiracao:
 - Cache expira em **24 horas** (configuravel)
