@@ -10,7 +10,15 @@
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-backend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-backend)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-backend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-backend)
 
-API RESTfull para consulta de feriados brasileiros com autenticação JWT e cache distribuído.
+API RESTfull para consulta de feriados brasileiros com autenticacao JWT e cache distribuido.
+
+## Screenshots
+
+### Tela de Login
+![Login](login.png)
+
+### Tela Principal
+![Tela Principal](launch.png)
 
 ## Arquitetura
 
