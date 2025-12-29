@@ -42,7 +42,7 @@ jobs:
         shell: powershell
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet sonarscanner begin /k:"vinialexandre_psw-digital-fullstack-challenge" /o:"vinialexandre" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
+          dotnet sonarscanner begin /k:"vinialexandre_psw-digital-fullstack-challenge-backend" /o:"vinialexandre" /d:sonar.projectName="PSW Digital Fullstack Challenge - Backend" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml"
           dotnet build HolidaysAPI.sln --no-restore
           dotnet test HolidaysAPI.sln --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
@@ -77,8 +77,9 @@ jobs:
         with:
           projectBaseDir: frontend
           args: >
-            -Dsonar.projectKey=vinialexandre_psw-digital-fullstack-challenge
+            -Dsonar.projectKey=vinialexandre_psw-digital-fullstack-challenge-frontend
             -Dsonar.organization=vinialexandre
+            -Dsonar.projectName=PSW Digital Fullstack Challenge - Frontend
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
