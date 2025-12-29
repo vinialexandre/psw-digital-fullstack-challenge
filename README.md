@@ -83,12 +83,12 @@ Cliente → API → AuthController → AuthService
 ## Cache com Redis
 
 ### Quando armazenamos no cache:
-- **Primeira requisicao**: Dados nao existem no Redis → Busca na BrasilAPI → Armazena no Redis
+- **Primeira requisição**: Dados nao existem no Redis → Busca na BrasilAPI → Armazena no Redis
 - **Requisições seguintes**: Dados existem no Redis → Retorna direto do cache (muito mais rapido)
 
 ### Expiracao:
 - Cache expira em **24 horas** (configuravel)
-- Apos expiracao, proxima requisicao busca novamente da API externa
+- Apos expiracao, proxima requisição busca novamente da API externa
 
 ### Fallback:
 - Se Redis estiver indisponivel, usa **IMemoryCache** (cache em memoria)
