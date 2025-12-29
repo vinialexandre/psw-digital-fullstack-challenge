@@ -17,6 +17,8 @@ public class AuthServiceTests
         _mockConfiguration.Setup(x => x["Jwt:Key"]).Returns("MySecretKeyForJWTTokenGeneration12345678901234567890");
         _mockConfiguration.Setup(x => x["Jwt:Issuer"]).Returns("HolidaysAPI");
         _mockConfiguration.Setup(x => x["Jwt:Audience"]).Returns("HolidaysAPIUsers");
+        _mockConfiguration.Setup(x => x["Auth:AdminUsername"]).Returns("admin");
+        _mockConfiguration.Setup(x => x["Auth:AdminPassword"]).Returns("admin123");
 
         _service = new AuthService(_mockConfiguration.Object);
     }

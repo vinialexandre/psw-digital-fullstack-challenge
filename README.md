@@ -1,5 +1,15 @@
 # PSW Digital - Desafio Técnico Fullstack
 
+[Frontend]
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-frontend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-frontend)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-frontend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-frontend)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-frontend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-frontend)
+
+[Backend]
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-backend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-backend)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-backend&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-backend)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=vinialexandre_psw-digital-fullstack-challenge-backend&metric=bugs)](https://sonarcloud.io/summary/new_code?id=vinialexandre_psw-digital-fullstack-challenge-backend)
+
 API RESTful para consulta de feriados brasileiros com autenticacao JWT e cache distribuido.
 
 ## Arquitetura

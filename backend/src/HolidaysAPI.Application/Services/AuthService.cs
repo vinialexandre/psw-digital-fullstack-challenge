@@ -24,7 +24,15 @@ public class AuthService : IAuthService
             return ApiResponse<LoginResponse>.ErrorResponse("Username and password are required");
         }
 
-        if (request.Username == "admin" && request.Password == "admin123")
+        var adminUsername = _configuration["Auth:AdminUsername"];
+        var adminPassword = _configuration["Auth:AdminPassword"];
+
+        if (string.IsNullOrEmpty(adminUsername) || string.IsNullOrEmpty(adminPassword))
+        {
+            return ApiResponse<LoginResponse>.ErrorResponse("Authentication is not configured");
+        }
+
+        if (request.Username == adminUsername && request.Password == adminPassword)
         {
             var token = GenerateJwtToken(request.Username);
             var expiresAt = DateTime.UtcNow.AddHours(24);
