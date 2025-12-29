@@ -121,7 +121,7 @@ builder.Services.AddHealthChecks()
     .AddCheck("self", () => Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy(), tags: ["ready"])
     .AddRedis(redisSettings.ConnectionString, name: "redis", tags: ["cache", "redis", "ready"]);
 
-builder.Services.AddHttpClient<BrasilApiService>();
+builder.Services.AddHttpClient<IBrasilApiService, BrasilApiService>();
 
 builder.Services.AddScoped<IHolidayRepository, HolidayRepository>();
 builder.Services.AddScoped<IHolidayService, HolidayService>();

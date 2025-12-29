@@ -6,9 +6,9 @@ namespace HolidaysAPI.Infrastructure.Repositories;
 
 public class HolidayRepository : IHolidayRepository
 {
-    private readonly BrasilApiService _brasilApiService;
+    private readonly IBrasilApiService _brasilApiService;
 
-    public HolidayRepository(BrasilApiService brasilApiService)
+    public HolidayRepository(IBrasilApiService brasilApiService)
     {
         _brasilApiService = brasilApiService;
     }

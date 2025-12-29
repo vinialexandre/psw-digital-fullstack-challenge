@@ -4,7 +4,7 @@ using HolidaysAPI.Domain.Enums;
 
 namespace HolidaysAPI.Infrastructure.ExternalServices;
 
-public class BrasilApiService
+public class BrasilApiService : IBrasilApiService
 {
     private readonly HttpClient _httpClient;
 

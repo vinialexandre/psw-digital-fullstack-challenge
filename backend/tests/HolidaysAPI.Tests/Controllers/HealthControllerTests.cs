@@ -36,9 +36,9 @@ public class HealthControllerTests
 
         var result = await _controller.Get();
 
-        result.Should().BeOfType<OkObjectResult>();
-        var okResult = result as OkObjectResult;
-        okResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = result as ObjectResult;
+        objectResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
     }
 
     [Fact]
@@ -76,7 +76,9 @@ public class HealthControllerTests
 
         var result = await _controller.Get();
 
-        result.Should().BeOfType<OkObjectResult>();
+        result.Should().BeOfType<ObjectResult>();
+        var objectResult = result as ObjectResult;
+        objectResult!.StatusCode.Should().Be(StatusCodes.Status200OK);
     }
 
     [Fact]

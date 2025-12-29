@@ -1,3 +1,4 @@
+using System.Text.Json;
 using FluentAssertions;
 using HolidaysAPI.Infrastructure.Cache;
 using HolidaysAPI.Infrastructure.Configuration;
@@ -42,7 +43,8 @@ public class RedisCacheServiceTests : IDisposable
     {
         var key = "test-key";
         var cachedValue = "cached-value";
-        var redisValue = RedisValue.Unbox(cachedValue);
+        var serializedValue = JsonSerializer.Serialize(cachedValue);
+        var redisValue = RedisValue.Unbox(serializedValue);
 
         _databaseMock.Setup(x => x.StringGetAsync(key, It.IsAny<CommandFlags>()))
             .ReturnsAsync(redisValue);

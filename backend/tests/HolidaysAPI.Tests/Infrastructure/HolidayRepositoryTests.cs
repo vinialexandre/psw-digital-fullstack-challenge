@@ -9,12 +9,12 @@ namespace HolidaysAPI.Tests.Infrastructure;
 
 public class HolidayRepositoryTests
 {
-    private readonly Mock<BrasilApiService> _brasilApiServiceMock;
+    private readonly Mock<IBrasilApiService> _brasilApiServiceMock;
     private readonly HolidayRepository _repository;
 
     public HolidayRepositoryTests()
     {
-        _brasilApiServiceMock = new Mock<BrasilApiService>(MockBehavior.Strict, null!);
+        _brasilApiServiceMock = new Mock<IBrasilApiService>();
         _repository = new HolidayRepository(_brasilApiServiceMock.Object);
     }
 
