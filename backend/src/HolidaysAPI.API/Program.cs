@@ -55,38 +55,47 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-if (builder.Environment.IsDevelopment())
-{
-    var devDefaults = new Dictionary<string, string?>
-    {
-        ["Jwt:Key"] = "DevOnlySecretKey12345678901234567890",
-        ["Jwt:Issuer"] = "HolidaysAPI",
-        ["Jwt:Audience"] = "HolidaysAPIUsers",
-        ["Auth:AdminUsername"] = "admin",
-        ["Auth:AdminPassword"] = "admin"
-    };
-
-    foreach (var (key, value) in devDefaults)
-    {
-        if (string.IsNullOrEmpty(builder.Configuration[key]))
-        {
-            builder.Configuration[key] = value;
-        }
-    }
-}
-
 builder.Services.AddOptions<JwtSettings>()
-    .Bind(builder.Configuration.GetSection(JwtSettings.SectionName))
+    .Configure(options =>
+    {
+        options.Key = Environment.GetEnvironmentVariable("JWT_KEY")
+            ?? builder.Configuration["Jwt:Key"]
+            ?? "DefaultDevKey12345678901234567890123";
+        options.Issuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
+            ?? builder.Configuration["Jwt:Issuer"]
+            ?? "HolidaysAPI";
+        options.Audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
+            ?? builder.Configuration["Jwt:Audience"]
+            ?? "HolidaysAPIUsers";
+        options.ExpirationHours = int.TryParse(
+            Environment.GetEnvironmentVariable("JWT_EXPIRATION_HOURS") ?? builder.Configuration["Jwt:ExpirationHours"],
+            out var hours) ? hours : 24;
+    })
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
 builder.Services.AddOptions<AuthSettings>()
-    .Bind(builder.Configuration.GetSection(AuthSettings.SectionName))
+    .Configure(options =>
+    {
+        options.AdminUsername = Environment.GetEnvironmentVariable("AUTH_ADMIN_USERNAME")
+            ?? builder.Configuration["Auth:AdminUsername"]
+            ?? "admin";
+        options.AdminPassword = Environment.GetEnvironmentVariable("AUTH_ADMIN_PASSWORD")
+            ?? builder.Configuration["Auth:AdminPassword"]
+            ?? "admin";
+    })
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
-var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
-    ?? throw new InvalidOperationException("JWT settings not configured");
+var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY")
+    ?? builder.Configuration["Jwt:Key"]
+    ?? "DefaultDevKey12345678901234567890123";
+var jwtIssuer = Environment.GetEnvironmentVariable("JWT_ISSUER")
+    ?? builder.Configuration["Jwt:Issuer"]
+    ?? "HolidaysAPI";
+var jwtAudience = Environment.GetEnvironmentVariable("JWT_AUDIENCE")
+    ?? builder.Configuration["Jwt:Audience"]
+    ?? "HolidaysAPIUsers";
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -97,9 +106,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
 
         options.Events = new JwtBearerEvents
