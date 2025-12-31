@@ -302,4 +302,133 @@ describe('HomePage', () => {
 
     expect(setFilter).toHaveBeenCalled();
   });
+
+  it('trata erro no logout', async () => {
+    const push = jest.fn();
+    mockUseRouter.mockReturnValue({ push });
+    mockUseHolidays.mockReturnValue(createHookState({ holidays: [], totalRecords: 0 }));
+    mockLogout.mockRejectedValue(new Error('Logout failed'));
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('MEUS FERIADOS')).toBeInTheDocument();
+    });
+
+    const logoutButton = screen.getByRole('button', { name: /logout|sair/i });
+    fireEvent.click(logoutButton);
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith('/login');
+    });
+  });
+
+  it('nao ordena quando campo vazio', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(createHookState({ holidays: [], totalRecords: 0, setFilter }));
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getAllByLabelText('Ordenar por').length).toBeGreaterThan(0);
+    });
+
+    const sortSelects = screen.getAllByLabelText('Ordenar por');
+    fireEvent.change(sortSelects[0], { target: { value: '' } });
+
+    expect(setFilter).not.toHaveBeenCalled();
+  });
+
+  it('fecha modal ao clicar no overlay', async () => {
+    mockUseHolidays.mockReturnValue(
+      createHookState({
+        holidays: [{ date: '2025-01-01', name: 'Ano Novo', type: 'National' }],
+        totalRecords: 1,
+      })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ano Novo')).toBeInTheDocument();
+    });
+
+    const holidayRow = screen.getByRole('button', { name: /ver detalhes do feriado ano novo/i });
+    fireEvent.click(holidayRow);
+
+    await waitFor(() => {
+      expect(screen.getByText('Detalhes do Feriado')).toBeInTheDocument();
+    });
+
+    const overlay = screen.getByRole('button', { name: /fechar modal clicando fora/i });
+    fireEvent.click(overlay);
+
+    await waitFor(() => {
+      expect(screen.queryByText('Detalhes do Feriado')).not.toBeInTheDocument();
+    });
+  });
+
+  it('exibe tipo Municipal corretamente', async () => {
+    mockUseHolidays.mockReturnValue(
+      createHookState({
+        holidays: [{ date: '2025-01-01', name: 'Feriado Municipal', type: 'Municipal' }],
+        totalRecords: 1,
+      })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Feriado Municipal')).toBeInTheDocument();
+    });
+
+    const municipalBadges = screen.getAllByText('Municipal');
+    expect(municipalBadges.length).toBeGreaterThan(0);
+  });
+
+  it('busca com ano selecionado', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(createHookState({ holidays: [], totalRecords: 0, setFilter }));
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Filtrar por ano')).toBeInTheDocument();
+    });
+
+    const yearSelect = screen.getByLabelText('Filtrar por ano');
+    fireEvent.change(yearSelect, { target: { value: '2024' } });
+
+    const searchButton = screen.getByRole('button', { name: /buscar feriados/i });
+    fireEvent.click(searchButton);
+
+    expect(setFilter).toHaveBeenCalledWith(expect.objectContaining({ year: 2024 }));
+  });
+
+  it('limpa busca com ano selecionado', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(createHookState({ holidays: [], totalRecords: 0, setFilter }));
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Busque por nome')).toBeInTheDocument();
+    });
+
+    const yearSelect = screen.getByLabelText('Filtrar por ano');
+    fireEvent.change(yearSelect, { target: { value: '2024' } });
+
+    const searchInput = screen.getByPlaceholderText('Busque por nome');
+    fireEvent.change(searchInput, { target: { value: 'Natal' } });
+
+    await waitFor(() => {
+      const buttons = screen.getAllByRole('button');
+      const clearButton = buttons.find(btn => btn.querySelector('svg path[d*="M6 18L18 6M6 6l12 12"]'));
+      if (clearButton) {
+        fireEvent.click(clearButton);
+      }
+    });
+
+    expect(setFilter).toHaveBeenCalledWith(expect.objectContaining({ year: 2024, searchTerm: undefined }));
+  });
 });

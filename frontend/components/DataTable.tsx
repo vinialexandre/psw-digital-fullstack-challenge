@@ -48,7 +48,7 @@ export function DataTable<T extends Record<string, unknown>>({
     const name = item.name;
     if (typeof name === 'string') return name;
     if (name && typeof name === 'object') return JSON.stringify(name);
-    return String(name || '');
+    return name ? String(name) : '';
   };
 
   return (

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DataTable, Column } from '@/components/DataTable';
 
-interface TestData {
+interface TestData extends Record<string, unknown> {
   id: number;
   name: string;
   value: number;
@@ -21,7 +21,7 @@ describe('DataTable', () => {
   ];
 
   it('renders table with data', () => {
-    render(<DataTable data={mockData} columns={columns} />);
+    render(<DataTable<TestData> data={mockData} columns={columns} />);
     
     expect(screen.getByText('ID')).toBeInTheDocument();
     expect(screen.getByText('Name')).toBeInTheDocument();
@@ -35,7 +35,7 @@ describe('DataTable', () => {
   it('calls onSort when clicking sortable column', () => {
     const mockOnSort = jest.fn();
     render(
-      <DataTable
+      <DataTable<TestData>
         data={mockData}
         columns={columns}
         onSort={mockOnSort}
@@ -52,7 +52,7 @@ describe('DataTable', () => {
 
   it('displays sort indicator for current sort field', () => {
     const { container } = render(
-      <DataTable
+      <DataTable<TestData>
         data={mockData}
         columns={columns}
         currentSortField="name"
@@ -73,10 +73,46 @@ describe('DataTable', () => {
       },
     ];
 
-    render(<DataTable data={mockData} columns={customColumns} />);
+    render(<DataTable<TestData> data={mockData} columns={customColumns} />);
     
     expect(screen.getByText('$ 100')).toBeInTheDocument();
     expect(screen.getByText('$ 200')).toBeInTheDocument();
     expect(screen.getByText('$ 300')).toBeInTheDocument();
+  });
+
+  it('handles items without id or date using index', () => {
+    const dataWithoutIds = [{ name: 'Test', value: 100 }] as TestData[];
+    render(<DataTable<TestData> data={dataWithoutIds} columns={columns} />);
+    expect(screen.getByText('Test')).toBeInTheDocument();
+  });
+
+  it('handles name as object in getItemName', () => {
+    const dataWithObjectName = [{ id: 1, name: { first: 'John' }, value: 100 }] as unknown as TestData[];
+    render(<DataTable<TestData> data={dataWithObjectName} columns={columns} />);
+    expect(screen.getByLabelText(/ver detalhes do feriado/i)).toBeInTheDocument();
+  });
+
+  it('handles name as null or undefined in getItemName', () => {
+    const dataWithNullName = [{ id: 1, name: null, value: 100 }] as unknown as TestData[];
+    render(<DataTable<TestData> data={dataWithNullName} columns={columns} />);
+    expect(screen.getByLabelText(/ver detalhes do feriado/i)).toBeInTheDocument();
+  });
+
+  it('toggles sort descending when clicking same field', () => {
+    const mockOnSort = jest.fn();
+    render(
+      <DataTable<TestData>
+        data={mockData}
+        columns={columns}
+        onSort={mockOnSort}
+        currentSortField="id"
+        currentSortDescending={true}
+      />
+    );
+    
+    const idHeader = screen.getByText('ID');
+    fireEvent.click(idHeader);
+    
+    expect(mockOnSort).toHaveBeenCalledWith('id', false);
   });
 });

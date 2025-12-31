@@ -266,17 +266,17 @@ export default function HomePage() {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedHoliday(null)}
-          onKeyDown={(e) => e.key === 'Escape' && setSelectedHoliday(null)}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-title"
-          tabIndex={-1}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === 'Enter' && setSelectedHoliday(null)}
+          aria-label="Fechar modal clicando fora"
         >
           <div
             className="bg-white rounded-lg p-6 md:p-8 max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="document"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
           >
             <div className="flex justify-between items-start mb-4 md:mb-6">
               <h3 id="modal-title" className="text-lg md:text-xl font-semibold text-gray-900">Detalhes do Feriado</h3>
