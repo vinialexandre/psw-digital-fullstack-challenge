@@ -266,16 +266,24 @@ export default function HomePage() {
         <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedHoliday(null)}
+          onKeyDown={(e) => e.key === 'Escape' && setSelectedHoliday(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          tabIndex={-1}
         >
           <div
             className="bg-white rounded-lg p-6 md:p-8 max-w-md w-full"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
+            role="document"
           >
             <div className="flex justify-between items-start mb-4 md:mb-6">
-              <h3 className="text-lg md:text-xl font-semibold text-gray-900">Detalhes do Feriado</h3>
+              <h3 id="modal-title" className="text-lg md:text-xl font-semibold text-gray-900">Detalhes do Feriado</h3>
               <button
                 onClick={() => setSelectedHoliday(null)}
                 className="text-gray-400 hover:text-gray-600 -mt-1 -mr-1"
+                aria-label="Fechar modal"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 md:w-6 md:h-6">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
