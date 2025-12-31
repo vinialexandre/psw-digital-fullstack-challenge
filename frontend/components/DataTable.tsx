@@ -13,6 +13,7 @@ interface DataTableProps<T> {
   onSort?: (field: keyof T, descending: boolean) => void;
   currentSortField?: keyof T;
   currentSortDescending?: boolean;
+  onRowClick?: (item: T) => void;
 }
 
 export function DataTable<T extends Record<string, unknown>>({
@@ -21,6 +22,7 @@ export function DataTable<T extends Record<string, unknown>>({
   onSort,
   currentSortField,
   currentSortDescending = false,
+  onRowClick,
 }: DataTableProps<T>) {
   const handleSort = (column: Column<T>) => {
     if (column.sortable && onSort) {
@@ -31,53 +33,47 @@ export function DataTable<T extends Record<string, unknown>>({
   };
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={String(column.key)}
-                className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                  column.sortable ? 'cursor-pointer hover:bg-gray-100' : ''
-                }`}
-                onClick={() => handleSort(column)}
-              >
-                <div className="flex items-center gap-2">
-                  {column.header}
-                  {column.sortable && currentSortField === column.key && (
-                    <span>
-                      {currentSortDescending ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
-                        </svg>
-                      ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" />
-                        </svg>
-                      )}
-                    </span>
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {data.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              {columns.map((column) => (
-                <td key={String(column.key)} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {column.render
-                    ? column.render(item[column.key], item)
-                    : String(item[column.key])}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-0 overflow-x-auto">
+      <div className="min-w-[600px] md:min-w-0">
+        <div className="flex items-center px-0 py-3 border-b border-gray-200">
+          <div className="w-48 md:w-80 text-xs md:text-sm font-semibold text-gray-700 cursor-pointer hover:text-gray-900" onClick={() => handleSort(columns[0])}>
+            {columns[0].header}
+          </div>
+          <div className="w-28 md:w-32 text-xs md:text-sm font-semibold text-gray-700 cursor-pointer hover:text-gray-900 ml-2 md:ml-3" onClick={() => handleSort(columns[1])}>
+            {columns[1].header}
+          </div>
+          <div className="w-28 md:w-32 text-xs md:text-sm font-semibold text-gray-700 cursor-pointer hover:text-gray-900 ml-12 md:ml-24" onClick={() => handleSort(columns[2])}>
+            {columns[2].header}
+          </div>
+        </div>
+
+        {data.map((item, index) => (
+          <div
+            key={index}
+            onClick={() => onRowClick?.(item)}
+            className="flex items-center justify-between px-0 py-4 md:py-6 border-b border-gray-100 hover:bg-gray-50 cursor-pointer"
+          >
+            <div className="flex items-center">
+              <div className="w-48 md:w-80 text-xs md:text-sm text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">
+                {String(item[columns[0].key])}
+              </div>
+              <div className="w-28 md:w-32 text-xs md:text-sm text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis ml-2 md:ml-3">
+                {String(item[columns[1].key])}
+              </div>
+              <div className="w-28 md:w-32 text-xs md:text-sm text-gray-900 ml-12 md:ml-24">
+                {columns[2].render
+                  ? columns[2].render(item[columns[2].key], item)
+                  : String(item[columns[2].key])}
+              </div>
+            </div>
+            <button className="text-gray-400 hover:text-gray-600 flex-shrink-0 ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 md:w-5 md:h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
-

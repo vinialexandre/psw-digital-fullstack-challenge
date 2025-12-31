@@ -19,24 +19,37 @@ export function HolidayFilters({ onFilterChange }: HolidayFiltersProps) {
     });
   };
 
-  const handleClear = () => {
-    setSelectedYear(currentYear);
-    setSearchTerm('');
-    setSelectedType('');
-    onFilterChange({ year: currentYear });
-  };
-
   return (
-    <div className="bg-white p-4 rounded-lg shadow mb-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Ano
-          </label>
+    <div className="space-y-4">
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        placeholder="Busque por nome"
+        className="w-full px-0 py-2 border-0 border-b border-gray-300 text-xs md:text-sm focus:outline-none focus:ring-0 focus:border-blue-500 text-gray-900 placeholder-gray-400 bg-transparent"
+        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+      />
+
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex-1">
+          <label className="block text-xs text-gray-500 mb-1">Tipo</label>
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded-full text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
+          >
+            <option value="">Todos</option>
+            <option value="National">Nacional</option>
+            <option value="Municipal">Municipal</option>
+          </select>
+        </div>
+
+        <div className="flex-1">
+          <label className="block text-xs text-gray-500 mb-1">Data do Feriado</label>
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+            className="w-full px-3 py-2 border border-gray-300 rounded-full text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
           >
             {Array.from({ length: 10 }, (_, i) => currentYear - 5 + i).map((year) => (
               <option key={year} value={year}>
@@ -45,58 +58,7 @@ export function HolidayFilters({ onFilterChange }: HolidayFiltersProps) {
             ))}
           </select>
         </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Nome
-          </label>
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Nome do feriado..."
-            className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Tipo
-          </label>
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className="w-full h-10 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
-          >
-            <option value="">Todos</option>
-            <option value="National">Nacional</option>
-            <option value="Municipal">Municipal</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="flex gap-2 mt-4 justify-end">
-        <button
-          onClick={handleClear}
-          className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-          Limpar
-        </button>
-        <button
-          onClick={handleSearch}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center gap-2"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-          Filtrar
-        </button>
       </div>
     </div>
   );
 }
-
