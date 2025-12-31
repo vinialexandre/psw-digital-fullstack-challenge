@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { HolidayFilter } from '@/types/holiday';
 
 interface HolidayFiltersProps {
-  onFilterChange: (filter: HolidayFilter) => void;
+  readonly onFilterChange: (filter: HolidayFilter) => void;
 }
 
 export function HolidayFilters({ onFilterChange }: HolidayFiltersProps) {

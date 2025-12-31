@@ -26,10 +26,10 @@ export function useHolidays(initialFilter?: HolidayFilter) {
         const axiosError = err as { response?: { status?: number } };
         if (axiosError.response?.status === 401) {
           return;
-        } else if (!axiosError.response) {
-          return;
-        } else {
+        } else if (axiosError.response) {
           setError('Erro ao carregar feriados');
+        } else {
+          return;
         }
       } else {
         return;

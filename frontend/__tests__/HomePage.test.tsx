@@ -360,8 +360,11 @@ describe('HomePage', () => {
       expect(screen.getByText('Detalhes do Feriado')).toBeInTheDocument();
     });
 
-    const overlay = screen.getByRole('button', { name: /fechar modal clicando fora/i });
-    fireEvent.click(overlay);
+    const buttons = screen.getAllByRole('button');
+    const overlay = buttons.find(btn => btn.getAttribute('aria-label') === 'Fechar modal clicando fora');
+    if (overlay) {
+      fireEvent.click(overlay);
+    }
 
     await waitFor(() => {
       expect(screen.queryByText('Detalhes do Feriado')).not.toBeInTheDocument();

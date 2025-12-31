@@ -8,12 +8,12 @@ export interface Column<T> {
 }
 
 interface DataTableProps<T> {
-  data: T[];
-  columns: Column<T>[];
-  onSort?: (field: keyof T, descending: boolean) => void;
-  currentSortField?: keyof T;
-  currentSortDescending?: boolean;
-  onRowClick?: (item: T) => void;
+  readonly data: T[];
+  readonly columns: Column<T>[];
+  readonly onSort?: (field: keyof T, descending: boolean) => void;
+  readonly currentSortField?: keyof T;
+  readonly currentSortDescending?: boolean;
+  readonly onRowClick?: (item: T) => void;
 }
 
 export function DataTable<T extends Record<string, unknown>>({

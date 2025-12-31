@@ -7,8 +7,8 @@ export interface Tab {
 }
 
 interface TabsProps {
-  tabs: Tab[];
-  defaultTab?: string;
+  readonly tabs: Tab[];
+  readonly defaultTab?: string;
 }
 
 export function Tabs({ tabs, defaultTab }: TabsProps) {

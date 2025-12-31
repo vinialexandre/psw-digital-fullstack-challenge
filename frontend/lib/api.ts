@@ -14,11 +14,9 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
-      if (error.response?.status === 401) {
-        window.location.href = '/login';
-      } else if (!error.response) {
-        window.location.href = '/login';
+    if (typeof globalThis.window !== 'undefined' && !globalThis.window.location.pathname.includes('/login')) {
+      if (error.response?.status === 401 || !error.response) {
+        globalThis.window.location.href = '/login';
       }
     }
     return Promise.reject(error);
