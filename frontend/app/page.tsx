@@ -279,6 +279,7 @@ export default function HomePage() {
             aria-modal="true"
             aria-labelledby="modal-title"
             onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-start mb-4 md:mb-6">
               <h3 id="modal-title" className="text-lg md:text-xl font-semibold text-gray-900">Detalhes do Feriado</h3>
