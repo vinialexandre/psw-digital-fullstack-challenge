@@ -15,10 +15,19 @@ API RESTfull para consulta de feriados brasileiros com autenticacao JWT e cache 
 ## Screenshots
 
 ### Tela de Login
-![Login](login.png)
+<img width="1918" height="907" alt="image" src="https://github.com/user-attachments/assets/f415be16-4493-4b42-85fd-68db85805cfe" />
 
 ### Tela Principal
-![Tela Principal](launch.png)
+<img width="1918" height="907" alt="image" src="https://github.com/user-attachments/assets/3cfd5be5-b18f-468b-bc43-d40b3fd012c0" />
+
+### Modal do Feriado
+<img width="1918" height="908" alt="image" src="https://github.com/user-attachments/assets/ad144e44-2728-4ddf-9ead-efb3e4715334" />
+
+### Busca
+
+<img width="1918" height="905" alt="image" src="https://github.com/user-attachments/assets/a6012c6a-0ea5-47ba-9135-b33e634cf7ba" />
+
+
 
 ## Arquitetura
 
