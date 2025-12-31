@@ -115,12 +115,12 @@ export default function HomePage() {
       <div className="px-4 md:px-8 lg:px-12 pt-8 md:pt-12 pb-6">
         <h2 className="text-xs md:text-sm text-gray-400 mb-6 md:mb-8">MEUS FERIADOS</h2>
 
-        <div className="flex gap-4 md:gap-8 lg:gap-20 mb-6 md:mb-8 border-b border-gray-200 md:pl-12 overflow-x-auto scrollbar-hide">
+        <nav className="flex gap-4 md:gap-8 lg:gap-20 mb-6 md:mb-8 border-b border-gray-200 md:pl-12 overflow-x-auto scrollbar-hide" role="navigation" aria-label="Menu de navegação">
           <button className="text-sm md:text-base text-gray-400 hover:text-gray-600 pb-3 whitespace-nowrap">Tela A</button>
           <button className="text-sm md:text-base text-gray-400 hover:text-gray-600 pb-3 whitespace-nowrap">Tela B</button>
           <button className="text-sm md:text-base text-gray-400 hover:text-gray-600 pb-3 whitespace-nowrap">Tela C</button>
-          <button className="text-sm md:text-base font-semibold text-gray-900 pb-3 border-b-4 border-blue-800 -mb-px px-4 md:px-8 whitespace-nowrap">Feriados</button>
-        </div>
+          <button className="text-sm md:text-base font-semibold text-gray-900 pb-3 border-b-4 border-blue-800 -mb-px px-4 md:px-8 whitespace-nowrap" aria-current="page">Feriados</button>
+        </nav>
 
         <div className="mb-6">
           <div className="flex items-center gap-2 md:gap-4">
@@ -144,7 +144,7 @@ export default function HomePage() {
                 </button>
               )}
             </div>
-            <button onClick={handleSearch} className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-blue-800 text-white flex items-center justify-center hover:bg-blue-900 flex-shrink-0">
+            <button onClick={handleSearch} className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-blue-800 text-white flex items-center justify-center hover:bg-blue-900 flex-shrink-0" aria-label="Buscar feriados">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-3.5 h-3.5 md:w-4 md:h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
@@ -152,7 +152,9 @@ export default function HomePage() {
             <div className="hidden md:flex items-center ml-6">
               <span className="text-sm text-gray-500 flex-shrink-0 mr-12">{allHolidays.totalRecords} REGISTROS</span>
               <div className="relative">
+                <label htmlFor="sort-select-desktop" className="sr-only">Ordenar por</label>
                 <select
+                  id="sort-select-desktop"
                   value={sortField}
                   onChange={(e) => handleSortChange(e.target.value)}
                   className="text-sm font-semibold text-gray-500 pr-6 bg-transparent border-0 focus:outline-none cursor-pointer appearance-none uppercase text-right"
@@ -172,7 +174,9 @@ export default function HomePage() {
           <div className="flex md:hidden items-center justify-between mt-4">
             <span className="text-xs text-gray-500">{allHolidays.totalRecords} REGISTROS</span>
             <div className="relative">
+              <label htmlFor="sort-select-mobile" className="sr-only">Ordenar por</label>
               <select
+                id="sort-select-mobile"
                 value={sortField}
                 onChange={(e) => handleSortChange(e.target.value)}
                 className="text-xs font-semibold text-gray-500 pr-6 bg-transparent border-0 focus:outline-none cursor-pointer appearance-none uppercase text-right"
@@ -191,7 +195,9 @@ export default function HomePage() {
 
         <div className="mb-6 flex gap-3 md:gap-4 w-full max-w-full md:w-auto" style={{ maxWidth: '100%' }}>
           <div className="relative flex-1 md:flex-none" style={{ maxWidth: '160px' }}>
+            <label htmlFor="type-filter" className="sr-only">Filtrar por tipo</label>
             <select
+              id="type-filter"
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
               className="w-full py-2 pr-10 md:pr-16 border-2 border-gray-400 rounded-full text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white appearance-none text-center md:text-right"
@@ -206,7 +212,9 @@ export default function HomePage() {
           </div>
 
           <div className="relative flex-1 md:flex-none" style={{ maxWidth: '200px' }}>
+            <label htmlFor="year-filter" className="sr-only">Filtrar por ano</label>
             <select
+              id="year-filter"
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
               className="w-full pl-3 md:pl-4 py-2 pr-10 md:pr-14 border-2 border-gray-400 rounded-full text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white appearance-none text-right"
@@ -277,17 +285,17 @@ export default function HomePage() {
 
             <div className="space-y-3 md:space-y-4">
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-500 uppercase">Nome</label>
+                <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase">Nome</p>
                 <p className="text-sm md:text-base text-gray-900 mt-1">{selectedHoliday.name}</p>
               </div>
 
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-500 uppercase">Data</label>
+                <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase">Data</p>
                 <p className="text-sm md:text-base text-gray-900 mt-1">{selectedHoliday.date}</p>
               </div>
 
               <div>
-                <label className="text-xs md:text-sm font-semibold text-gray-500 uppercase">Tipo</label>
+                <p className="text-xs md:text-sm font-semibold text-gray-500 uppercase">Tipo</p>
                 <div className="mt-1">
                   <span
                     className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-gray-900"

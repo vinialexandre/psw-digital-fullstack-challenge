@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import HomePage from '@/app/page';
 import { useHolidays } from '@/hooks/useHolidays';
 import { authService } from '@/lib/api';
@@ -120,5 +120,186 @@ describe('HomePage', () => {
     });
 
     expect(push).toHaveBeenCalledWith('/login');
+  });
+
+  it('permite buscar feriados por nome', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(
+      createHookState({ holidays: [], totalRecords: 0, setFilter })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Busque por nome')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText('Busque por nome');
+    fireEvent.change(searchInput, { target: { value: 'Natal' } });
+
+    const searchButton = screen.getByRole('button', { name: /buscar feriados/i });
+    fireEvent.click(searchButton);
+
+    expect(setFilter).toHaveBeenCalled();
+  });
+
+  it('permite limpar busca', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(
+      createHookState({ holidays: [], totalRecords: 0, setFilter })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Busque por nome')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText('Busque por nome');
+    fireEvent.change(searchInput, { target: { value: 'Natal' } });
+
+    await waitFor(() => {
+      const buttons = screen.getAllByRole('button');
+      const clearButton = buttons.find(btn => btn.querySelector('svg path[d*="M6 18L18 6M6 6l12 12"]'));
+      if (clearButton) {
+        fireEvent.click(clearButton);
+      }
+    });
+
+    expect(setFilter).toHaveBeenCalled();
+  });
+
+  it('permite ordenar feriados', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(
+      createHookState({ holidays: [], totalRecords: 0, setFilter })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getAllByLabelText('Ordenar por').length).toBeGreaterThan(0);
+    });
+
+    const sortSelects = screen.getAllByLabelText('Ordenar por');
+    fireEvent.change(sortSelects[0], { target: { value: 'name' } });
+
+    expect(setFilter).toHaveBeenCalled();
+  });
+
+  it('permite filtrar por tipo', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(
+      createHookState({ holidays: [], totalRecords: 0, setFilter })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Filtrar por tipo')).toBeInTheDocument();
+    });
+
+    const typeSelect = screen.getByLabelText('Filtrar por tipo');
+    fireEvent.change(typeSelect, { target: { value: 'National' } });
+
+    expect(typeSelect).toHaveValue('National');
+  });
+
+  it('permite filtrar por ano', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(
+      createHookState({ holidays: [], totalRecords: 0, setFilter })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByLabelText('Filtrar por ano')).toBeInTheDocument();
+    });
+
+    const yearSelect = screen.getByLabelText('Filtrar por ano');
+    fireEvent.change(yearSelect, { target: { value: '2024' } });
+
+    expect(yearSelect).toHaveValue('2024');
+  });
+
+  it('abre modal ao clicar em feriado', async () => {
+    mockUseHolidays.mockReturnValue(
+      createHookState({
+        holidays: [
+          { date: '2025-01-01', name: 'Ano Novo', type: 'National' },
+        ],
+        totalRecords: 1,
+      })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ano Novo')).toBeInTheDocument();
+    });
+
+    const holidayRow = screen.getByRole('button', { name: /ver detalhes do feriado ano novo/i });
+    fireEvent.click(holidayRow);
+
+    await waitFor(() => {
+      expect(screen.getByText('Detalhes do Feriado')).toBeInTheDocument();
+    });
+  });
+
+  it('fecha modal ao clicar no botao fechar', async () => {
+    mockUseHolidays.mockReturnValue(
+      createHookState({
+        holidays: [
+          { date: '2025-01-01', name: 'Ano Novo', type: 'National' },
+        ],
+        totalRecords: 1,
+      })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ano Novo')).toBeInTheDocument();
+    });
+
+    const holidayRow = screen.getByRole('button', { name: /ver detalhes do feriado ano novo/i });
+    fireEvent.click(holidayRow);
+
+    await waitFor(() => {
+      expect(screen.getByText('Detalhes do Feriado')).toBeInTheDocument();
+    });
+
+    const modal = screen.getByText('Detalhes do Feriado').closest('div');
+    if (modal && modal.parentElement) {
+      const closeButtons = within(modal.parentElement).getAllByRole('button');
+      const closeButton = closeButtons.find(btn => btn.querySelector('svg path[d*="M6 18L18 6M6 6l12 12"]'));
+      if (closeButton) {
+        fireEvent.click(closeButton);
+      }
+    }
+
+    await waitFor(() => {
+      expect(screen.queryByText('Detalhes do Feriado')).not.toBeInTheDocument();
+    });
+  });
+
+  it('busca ao pressionar Enter no campo de busca', async () => {
+    const setFilter = jest.fn();
+    mockUseHolidays.mockReturnValue(
+      createHookState({ holidays: [], totalRecords: 0, setFilter })
+    );
+
+    render(<HomePage />);
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Busque por nome')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText('Busque por nome');
+    fireEvent.change(searchInput, { target: { value: 'Natal' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+
+    expect(setFilter).toHaveBeenCalled();
   });
 });

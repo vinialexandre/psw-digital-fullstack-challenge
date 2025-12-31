@@ -32,8 +32,9 @@ export function HolidayFilters({ onFilterChange }: HolidayFiltersProps) {
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1">Tipo</label>
+          <label htmlFor="type-filter" className="block text-xs text-gray-500 mb-1">Tipo</label>
           <select
+            id="type-filter"
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-full text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
@@ -45,8 +46,9 @@ export function HolidayFilters({ onFilterChange }: HolidayFiltersProps) {
         </div>
 
         <div className="flex-1">
-          <label className="block text-xs text-gray-500 mb-1">Data do Feriado</label>
+          <label htmlFor="year-filter" className="block text-xs text-gray-500 mb-1">Data do Feriado</label>
           <select
+            id="year-filter"
             value={selectedYear}
             onChange={(e) => setSelectedYear(Number(e.target.value))}
             className="w-full px-3 py-2 border border-gray-300 rounded-full text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"

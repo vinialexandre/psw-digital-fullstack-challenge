@@ -60,7 +60,7 @@ describe('DataTable', () => {
       />
     );
 
-    const headers = container.querySelectorAll('.cursor-pointer');
+    const headers = container.querySelectorAll('button');
     expect(headers.length).toBeGreaterThan(0);
   });
 
