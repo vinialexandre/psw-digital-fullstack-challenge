@@ -90,10 +90,9 @@ describe('HomePage', () => {
     render(<HomePage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Feriados Brasileiros 2025')).toBeInTheDocument();
+      expect(screen.getByText('Ano Novo')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Ano Novo')).toBeInTheDocument();
     expect(screen.getAllByText('Nacional').length).toBeGreaterThan(0);
   });
 
@@ -110,10 +109,11 @@ describe('HomePage', () => {
     render(<HomePage />);
 
     await waitFor(() => {
-      expect(screen.getByText('Sair')).toBeInTheDocument();
+      expect(screen.getByText('MEUS FERIADOS')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Sair'));
+    const logoutButton = screen.getByRole('button', { name: /logout|sair/i });
+    fireEvent.click(logoutButton);
 
     await waitFor(() => {
       expect(mockLogout).toHaveBeenCalled();
